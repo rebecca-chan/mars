@@ -22,6 +22,8 @@ export default class CalendarForm extends React.Component {
     return (
       <DatePicker
         placeholderText="Select Date"
+        minDate={new Date(2015, 5, 5)}
+        maxDate={new Date()}
         selected={this.state.startDate}
         onChange={this.handleChange}
       />

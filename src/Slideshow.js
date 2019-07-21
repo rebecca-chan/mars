@@ -13,7 +13,7 @@ export default class Slideshow extends React.Component {
 
   componentDidMount() {
     fetch(
-      'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2015-6-3&api_key=DEMO_KEY'
+      'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2015-6-3&api_key=$'
     )
       .then(res => res.json())
       .then(
@@ -23,9 +23,6 @@ export default class Slideshow extends React.Component {
             items: result.items
           });
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         error => {
           this.setState({
             isLoaded: true,
