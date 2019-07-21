@@ -1,7 +1,7 @@
 import React from 'react';
-import logo from './logo.jpg';
 import './App.css';
 import CalendarForm from './CalendarForm';
+import Slideshow from './Slideshow';
 
 function App() {
   return (
@@ -10,11 +10,7 @@ function App() {
         <h1>Mars</h1>
         <div class="stars" />
         <div class="twinkling" />
-
-        <p />
-        <a>
-          <img src={logo} className="App-logo" alt="logo" />
-        </a>
+        <Slideshow />
         <CalendarForm />
       </header>
     </div>
