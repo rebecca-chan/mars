@@ -67,7 +67,7 @@ export default class Slideshow extends React.Component {
         <div>
           {/* <p>{camera.full_name}</p> */}
           <div className="gallery">
-            <span className="helper">
+            <div className="helper">
               <img
                 src={img_src ? img_src : ''}
                 className="gallery-item"
@@ -77,14 +77,13 @@ export default class Slideshow extends React.Component {
                 className="fa fa-angle-right"
                 onClick={() =>
                   this.setState(prevState => ({
-                    currentImage: this.state.allImages[
-                      Number(prevState.pictureId) + 1
-                    ],
+                    currentImage:
+                      prevState.allImages[Number(prevState.pictureId) + 1],
                     pictureId: Number(prevState.pictureId) + 1
                   }))
                 }
               />
-            </span>
+            </div>
           </div>
         </div>
       );
