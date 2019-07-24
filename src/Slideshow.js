@@ -72,13 +72,12 @@ export default class Slideshow extends React.Component {
   }
 
   render() {
-    const { img_src, camera } = this.state.currentImage;
-    console.log(camera, 'camera');
-    console.log(this.state.currentImage, 'currentImage');
-
     if (this.state.isLoaded && !this.state.allImages)
       return <p>There are no photos for this day.</p>;
     else {
+      const { img_src, camera } = this.state.currentImage;
+      console.log(camera, 'camera');
+      console.log(this.state.currentImage, 'currentImage');
       return (
         <div>
           {/* <p>{camera.full_name}</p> */}
