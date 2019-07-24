@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import './React-datepicker.css';
 import Slideshow from './Slideshow';
 import Landing from './Landing';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 class App extends React.Component {
   constructor() {
@@ -16,12 +16,9 @@ class App extends React.Component {
   }
 
   handleChange(date) {
-    this.setState(
-      {
-        startDate: date
-      }
-      // () => console.log(this.state.startDate)
-    );
+    this.setState({
+      startDate: date
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -29,37 +26,34 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state, 'app state');
     return (
-      <Switch>
-        <div className="App">
-          <div className="stars" />
-          <div className="twinkling" />
-          <header className="App-header">
-            <h1>Mars</h1>
+      <div className="App">
+        <div className="stars" />
+        <div className="twinkling" />
+        <header className="App-header">
+          <h1>Mars</h1>
 
-            {this.state.startDate ? (
-              <div>
-                <Slideshow date={this.state.startDate} />
-              </div>
-            ) : (
-              <div>
-                <Route path="/" component={Landing} />
-              </div>
-            )}
+          {this.state.startDate ? (
+            <div>
+              <Slideshow date={this.state.startDate} />
+            </div>
+          ) : (
+            <div>
+              <Route path="/" component={Landing} />
+            </div>
+          )}
 
-            <Redirect to={'/'} />
+          <Redirect to={'/'} />
 
-            <DatePicker
-              placeholderText="Date"
-              minDate={new Date(2015, 5, 3)}
-              maxDate={new Date()}
-              selected={this.state.startDate}
-              onChange={this.handleChange}
-            />
-          </header>
-        </div>
-      </Switch>
+          <DatePicker
+            placeholderText="Date"
+            minDate={new Date(2015, 5, 3)}
+            maxDate={new Date()}
+            selected={this.state.startDate}
+            onChange={this.handleChange}
+          />
+        </header>
+      </div>
     );
   }
 }
