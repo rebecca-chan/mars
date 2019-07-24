@@ -16,25 +16,38 @@ class App extends React.Component {
   }
 
   handleChange(date) {
-    this.setState({
-      startDate: date
-    });
+    this.setState(
+      {
+        startDate: date
+      }
+      // () => console.log(this.state.startDate)
+    );
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.startDate !== nextState.startDate;
   }
 
   render() {
+    console.log(this.state, 'app state');
     return (
       <Switch>
         <div className="App">
+          <div className="stars" />
+          <div className="twinkling" />
           <header className="App-header">
             <h1>Mars</h1>
-            <div class="stars" />
-            <div class="twinkling" />
-            <Route path="/" component={Landing} />
-            <Route
-              path="/:this.state.startDate/:pictureId"
-              component={Slideshow}
-              earthdate={this.state.startDate}
-            />
+
+            {this.state.startDate ? (
+              <div>
+                <Slideshow date={this.state.startDate} />
+              </div>
+            ) : (
+              <div>
+                <Route path="/" component={Landing} />
+              </div>
+            )}
+
             <Redirect to={'/'} />
 
             <DatePicker

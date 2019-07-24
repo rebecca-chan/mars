@@ -1,30 +1,34 @@
 import React from 'react';
-import logo from './logo.jpg';
-import SingleImage from './SingleImage';
+import { API_KEY } from './secrets';
+import { Link } from 'react-router-dom';
 
 export default class Slideshow extends React.Component {
   constructor(props) {
     super(props);
-    const defaultImage = { logo };
     this.state = {
-      currentImage: defaultImage,
-      camera: null,
-      allImages: [],
-      alt: ''
+      pictureId: 0,
+      currentImage: {},
+      allImages: []
     };
   }
 
   componentDidMount() {
-    const API_KEY = process.env.API_KEY;
+    const earthdate = this.props.date
+      .toISOString()
+      .slice(0, 10)
+      .replace(/(^|-)0+/g, '$1');
     // const earthdate = this.props.earthdate;
     fetch(
-      `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2015-6-3&api_key=${API_KEY}`
+      `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthdate}&api_key=${API_KEY}`
     )
       .then(res => res.json())
       .then(
-        result => {
+        data => {
+          console.log(data.photos, 'data.photos');
+          console.log(data.photos[this.state.pictureId], 'of zero');
           this.setState({
-            allImages: result.photos
+            allImages: data.photos,
+            currentImage: data.photos[this.state.pictureId]
           });
         },
         error => {
@@ -36,42 +40,60 @@ export default class Slideshow extends React.Component {
       );
   }
 
-  // async componentDidUpdate(prevProps, prevState) {
-  //   const latest = this.props.match.params.pictureId;
+  //  componentDidUpdate(prevProps, prevState) {
+  //   const latest = this.state.pictureId;
   //   const prev = prevProps.match.params.pictureId;
 
   //   if (latest !== prev) {
-  //     const { data } = await axios.get(`/pictures/${latest}`);
   //     this.setState({
-  //       picture: data
+  //       currentImage: this.state.allImages[latest]
   //     });
   //   }
   // }
-  renderItems() {
-    return this.props.items.map(item => (
-      <SingleImage key={item.id} item={item} />
-    ));
+  componentDidUpdate() {
+    console.log('updated!');
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(this.props, nextProps, 'props updated?');
+    return this.props.date !== nextProps.date;
   }
 
   render() {
-    // const pictureId = Number(this.props.match.params.pictureId);
-    // const next = (pictureId % 5) + 1;
-    // const prev = pictureId <= 1 ? 5 : pictureId - 1;
-    // const { imageUrl, name, faves } = this.state.picture;
+    const { img_src, camera } = this.state.currentImage;
+    console.log(camera, 'camera');
+    console.log(this.state.currentImage, 'currentImage');
 
-    console.log(this.props);
-    return (
-      <div id="gallery-item" className="fill">
-        <div id="image-wrapper">{this.renderItems()}</div>
-        <div id="image-details">
-          {/* <Link to={`/gallery/${prev}`}>Prev</Link> */}
-          <p>{this.state.camera}</p>
-          {/* <Link to={`/gallery/${next}`}>Next</Link> */}
+    if (this.state.isLoaded && !this.state.allImages)
+      return <p>There are no photos for this day.</p>;
+    else {
+      return (
+        <div>
+          {/* <p>{camera.full_name}</p> */}
+          <div className="gallery">
+            <span className="helper">
+              <img src={img_src} className="gallery-item" alt="mars" />
+              <i
+                className="fa fa-angle-right"
+                onClick={() =>
+                  this.setState(prevState => ({
+                    currentImage: this.state.allImages[
+                      Number(prevState.pictureId) + 1
+                    ],
+                    pictureId: Number(prevState.pictureId) + 1
+                  }))
+                }
+              />
+            </span>
+          </div>
         </div>
-      </div>
+      );
+      /*
+          { <Link to={`/gallery/${prev}`}>Prev</Link> }
+          {  }*/
       // <div>
       //   <img src={logo} className="App-logo" alt="logo" />
       // </div>
-    );
+    }
   }
 }
