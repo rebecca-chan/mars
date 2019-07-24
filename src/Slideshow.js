@@ -1,5 +1,6 @@
 import React from 'react';
 import { API_KEY } from './secrets';
+import axios from 'axios';
 
 export default class Slideshow extends React.Component {
   constructor(props) {
@@ -17,29 +18,24 @@ export default class Slideshow extends React.Component {
       .toISOString()
       .slice(0, 10)
       .replace(/(^|-)0+/g, '$1');
-    fetch(
-      `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthdate}&api_key=${API_KEY}`
-    )
-      .then(res => res.json())
-      .then(
-        data => {
-          console.log(data.photos, 'data.photos');
-          console.log(data.photos[this.state.pictureId], 'of zero');
-          this.setState({
-            allImages: data.photos,
-            currentImage: data.photos[this.state.pictureId]
-          });
-        },
-        error => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
+    axios
+      .get(
+        `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthdate}&api_key=${API_KEY}`
+      )
+      .then(({ data }) => {
+        console.log(data, 'data in axio');
+        this.setState({
+          allImages: data.photos,
+          currentImage: data.photos.length
+            ? data.photos[this.state.pictureId]
+            : null,
+          isLoaded: true
+        });
+      })
+      .catch(error => console.log(error, 'err'));
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     const latest = this.props.date;
     const prev = prevProps.date;
     if (latest !== prev) {
@@ -47,32 +43,21 @@ export default class Slideshow extends React.Component {
         .toISOString()
         .slice(0, 10)
         .replace(/(^|-)0+/g, '$1');
-      console.log(earthdate, 'earthdate');
-      fetch(
+      const { data } = await axios.get(
         `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthdate}&api_key=${API_KEY}`
-      )
-        .then(res => res.json())
-        .then(
-          data => {
-            console.log(data.photos, 'data.photos');
-            console.log(data.photos[this.state.pictureId], 'of zero');
-            this.setState({
-              allImages: data.photos,
-              currentImage: data.photos[this.state.pictureId]
-            });
-          },
-          error => {
-            this.setState({
-              isLoaded: true,
-              error
-            });
-          }
-        );
+      );
+
+      this.setState({
+        allImages: data.photos,
+        currentImage: data.photos[this.state.pictureId],
+        isLoaded: true
+      });
     }
   }
 
   render() {
-    if (this.state.isLoaded && !this.state.allImages)
+    if (!this.state.isLoaded) return <p>Loading</p>;
+    if (this.state.isLoaded && !this.state.allImages.length)
       return <p>There are no photos for this day.</p>;
     else {
       const { img_src, camera } = this.state.currentImage;
@@ -83,7 +68,11 @@ export default class Slideshow extends React.Component {
           {/* <p>{camera.full_name}</p> */}
           <div className="gallery">
             <span className="helper">
-              <img src={img_src} className="gallery-item" alt="mars" />
+              <img
+                src={img_src ? img_src : ''}
+                className="gallery-item"
+                alt="mars"
+              />
               <i
                 className="fa fa-angle-right"
                 onClick={() =>
