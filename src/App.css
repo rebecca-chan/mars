@@ -175,7 +175,8 @@ p {
 }
 
 .helper {
-  display: inline-table;
+  display: flex;
+  align-items: center;
   height: 100%;
   vertical-align: middle;
 }
