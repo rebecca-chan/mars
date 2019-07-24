@@ -181,8 +181,18 @@ p {
   vertical-align: middle;
 }
 
-.fa {
+.fa:hover {
+  cursor: pointer;
   vertical-align: middle;
   min-height: 100%;
   float: right;
+}
+
+.fa-angle-right:before {
+  font-size: 3.5em;
+  margin-left: 0.5em;
+}
+
+.fa-angle-right:hover {
+  cursor: pointer;
 }
