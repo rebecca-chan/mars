@@ -1,6 +1,5 @@
 import React from 'react';
 import { API_KEY } from './secrets';
-import { Link } from 'react-router-dom';
 
 export default class Slideshow extends React.Component {
   constructor(props) {
@@ -8,7 +7,8 @@ export default class Slideshow extends React.Component {
     this.state = {
       pictureId: 0,
       currentImage: {},
-      allImages: []
+      allImages: [],
+      isLoaded: false
     };
   }
 
@@ -17,7 +17,6 @@ export default class Slideshow extends React.Component {
       .toISOString()
       .slice(0, 10)
       .replace(/(^|-)0+/g, '$1');
-    // const earthdate = this.props.earthdate;
     fetch(
       `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthdate}&api_key=${API_KEY}`
     )
@@ -40,23 +39,36 @@ export default class Slideshow extends React.Component {
       );
   }
 
-  //  componentDidUpdate(prevProps, prevState) {
-  //   const latest = this.state.pictureId;
-  //   const prev = prevProps.match.params.pictureId;
-
-  //   if (latest !== prev) {
-  //     this.setState({
-  //       currentImage: this.state.allImages[latest]
-  //     });
-  //   }
-  // }
-  componentDidUpdate() {
-    console.log('updated!');
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(this.props, nextProps, 'props updated?');
-    return this.props.date !== nextProps.date;
+  componentDidUpdate(prevProps, prevState) {
+    const latest = this.props.date;
+    const prev = prevProps.date;
+    if (latest !== prev) {
+      const earthdate = this.props.date
+        .toISOString()
+        .slice(0, 10)
+        .replace(/(^|-)0+/g, '$1');
+      console.log(earthdate, 'earthdate');
+      fetch(
+        `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthdate}&api_key=${API_KEY}`
+      )
+        .then(res => res.json())
+        .then(
+          data => {
+            console.log(data.photos, 'data.photos');
+            console.log(data.photos[this.state.pictureId], 'of zero');
+            this.setState({
+              allImages: data.photos,
+              currentImage: data.photos[this.state.pictureId]
+            });
+          },
+          error => {
+            this.setState({
+              isLoaded: true,
+              error
+            });
+          }
+        );
+    }
   }
 
   render() {
@@ -88,12 +100,6 @@ export default class Slideshow extends React.Component {
           </div>
         </div>
       );
-      /*
-          { <Link to={`/gallery/${prev}`}>Prev</Link> }
-          {  }*/
-      // <div>
-      //   <img src={logo} className="App-logo" alt="logo" />
-      // </div>
     }
   }
 }
