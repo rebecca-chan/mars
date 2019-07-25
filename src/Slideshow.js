@@ -1,6 +1,6 @@
 import React from 'react';
-import { API_KEY } from './secrets';
 import axios from 'axios';
+const API_KEY = process.env.API_KEY;
 
 export default class Slideshow extends React.Component {
   constructor(props) {
