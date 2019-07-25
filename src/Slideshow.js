@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-const API_KEY = process.env.API_KEY;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 export default class Slideshow extends React.Component {
   constructor(props) {
@@ -34,7 +34,6 @@ export default class Slideshow extends React.Component {
     const { data } = await axios.get(
       `https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=${earthdate}&api_key=${API_KEY}`
     );
-
     this.setState({
       pictureId: 0,
       allImages: data.photos,

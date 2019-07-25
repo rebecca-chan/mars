@@ -1,7 +1,6 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import './React-datepicker.css';
-// import 'react-datepicker/dist/react-datepicker.css';
 
 export default class CalendarForm extends React.Component {
   constructor(props) {
