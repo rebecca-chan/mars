@@ -4,7 +4,6 @@ import DatePicker from 'react-datepicker';
 import './React-datepicker.css';
 import Slideshow from './Slideshow';
 import Landing from './Landing';
-import { Route, Redirect } from 'react-router-dom';
 
 class App extends React.Component {
   constructor() {
@@ -39,11 +38,9 @@ class App extends React.Component {
             </div>
           ) : (
             <div>
-              <Route path="/" component={Landing} />
+              <Landing />
             </div>
           )}
-
-          <Redirect to={'/'} />
 
           <DatePicker
             placeholderText="Date"

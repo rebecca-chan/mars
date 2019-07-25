@@ -160,9 +160,10 @@ a:visited {
 }
 
 .gallery-item {
-  height: 40vmin;
+  height: 100%;
   pointer-events: none;
   position: relative;
+  width: calc(100vw - 70vw);
 }
 
 p {
@@ -172,6 +173,7 @@ p {
 .gallery {
   position: relative;
   display: inline-block;
+  width: 100%;
 }
 
 .helper {
@@ -183,16 +185,14 @@ p {
 
 .fa:hover {
   cursor: pointer;
+  color: orange;
   vertical-align: middle;
   min-height: 100%;
-  float: right;
 }
 
-.fa-angle-right:before {
+.fa-angle-right:before,
+.fa-angle-left:before {
   font-size: 3.5em;
-  margin-left: 0.5em;
-}
-
-.fa-angle-right:hover {
-  cursor: pointer;
+  margin-left: 0.2em;
+  margin-right: 0.2em;
 }
